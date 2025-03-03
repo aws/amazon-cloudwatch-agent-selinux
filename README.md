@@ -1,9 +1,9 @@
-## AMAZON-CWA-AGENT-SELINUX POLICY
+## AMAZON-CLOUDWATCH-AGENT-SELINUX POLICY
 
-###### Note - We provide a base SELinux policy that allows basic Amazon-CWA-agent functionality. If users want more permissions, then they should review the SELinux documentation to understand how to update the policy to allow additional access, and scope it appropriately for their use case.
+###### Note - We provide a base SELinux policy that allows basic Amazon-CloudWatch-agent functionality. If users want more permissions, then they should review the SELinux documentation to understand how to update the policy to allow additional access, and scope it appropriately for their use case.
 ###### Note - This policy has been tested to work on AL2 and AL2023 only for now. Please make sure that the OS you are using is AL2 or AL2023.
 
-This is the SELinux policy for AWS CWA agent. Install this policy to confine your CWA agent processes.
+This is the SELinux policy for AWS CWA agent. Install this policy to confine your CloudWatch Agent processes.
 
 ## Installation instructions
 
@@ -38,10 +38,10 @@ SELINUXTYPE=targeted
 Clone the repository, build and install using the commands below:
 
 ```
-git clone https://github.com/aws/amazon-CWA-agent-selinux.git
-cd amazon-cwa-agent-selinux
-chmod +x amazon_cwa_agent.sh
-sudo ./amazon_cwa_agent.sh
+git clone https://github.com/aws/amazon-cloudwatch-agent-selinux.git
+cd amazon-cloudwatch-agent-selinux
+chmod +x amazon_cloudwatch_agent.sh
+sudo ./amazon_cloudwatch_agent.sh
 ```
 Reboot the instance and verify that your instance is in `enforcing` mode or `permissive` mode as chosen:
 
@@ -65,8 +65,8 @@ List the CWA processes to check that they are confined:
 
 ps -efZ | grep -i amazon
 
-system_u:system_r:amazon_cwa_agent_t:s0 root 5665  1  0 00:15 ?        00:00:02 /usr/bin/amazon-cwa-agent
-system_u:system_r:amazon_cwa_agent_t:s0 root 5746 5665  0 00:15 ?      00:00:02 /usr/bin/cwa-agent-worker
+system_u:system_r:amazon_cloudwatch_agent_t:s0 root 5665  1  0 00:15 ?        00:00:02 /usr/bin/amazon-cloudwatch-agent
+system_u:system_r:amazon_cloudwatch_agent_t:s0 root 5746 5665  0 00:15 ?      00:00:02 /usr/bin/cloudwatch-agent-worker
 
 ```
 
