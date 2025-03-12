@@ -43,11 +43,17 @@ cd amazon-cloudwatch-agent-selinux
 chmod +x amazon_cloudwatch_agent.sh
 sudo ./amazon_cloudwatch_agent.sh
 ```
-Reboot the instance and verify that your instance is in `enforcing` mode or `permissive` mode as chosen:
+If you need to enable it, please enable the repository, reboot the instance, and verify that it is in either enforcing or permissive mode, depending on your selection.
+
+Otherwise, you can simply restart the agent to ensure it runs in the confined context.
 
 ```
-sudo sestatus
+sudo systemctl restart amazon-cloudwatch-agent
+```
 
+Run `sudo sestatus` in order to see if SELinux is enabled:
+
+```
 SELinux status:                 enabled
 SELinuxfs mount:                /sys/fs/selinux
 SELinux root directory:         /etc/selinux
