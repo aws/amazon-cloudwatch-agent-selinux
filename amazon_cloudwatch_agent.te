@@ -53,7 +53,7 @@ require {
 }
 
 type amazon_cloudwatch_agent_t;
-type amazon_cloudwatch_agent_exec_t;]
+type amazon_cloudwatch_agent_exec_t;
 init_daemon_domain(amazon_cloudwatch_agent_t, amazon_cloudwatch_agent_exec_t)
 
 # Basic permissions
