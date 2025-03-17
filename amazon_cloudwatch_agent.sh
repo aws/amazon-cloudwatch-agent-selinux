@@ -15,6 +15,6 @@ make -f /usr/share/selinux/devel/Makefile amazon_cloudwatch_agent.pp || exit
 
 # Fixing the file context on CloudWatch agent files
 /sbin/restorecon -R -v /opt/aws/amazon-cloudwatch-agent || true
-/sbin/restorecon -v /usr/lib/systemd/system/amazon-cloudwatch-agent.service || true
+/sbin/restorecon -v /etc/systemd/system/amazon-cloudwatch-agent.service || true
 
 echo "Policy loaded. You may need to restart the CloudWatch agent: systemctl restart amazon-cloudwatch-agent"
