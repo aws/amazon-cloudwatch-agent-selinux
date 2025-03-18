@@ -25,7 +25,7 @@ mkdir -p /etc/systemd/system/amazon-cloudwatch-agent.service.d
 # Create the override file with the Environment variable
 cat <<EOF | tee /etc/systemd/system/amazon-cloudwatch-agent.service.d/override.conf
 [Service]
-Environment="CWAGENT_DEBUG=true"
+Environment="SELINUX=True"
 EOF
 
 # Reload systemd and restart the CloudWatch agent
