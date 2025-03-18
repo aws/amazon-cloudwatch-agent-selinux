@@ -17,4 +17,19 @@ make -f /usr/share/selinux/devel/Makefile amazon_cloudwatch_agent.pp || exit
 /sbin/restorecon -R -v /opt/aws/amazon-cloudwatch-agent || true
 /sbin/restorecon -v /etc/systemd/system/amazon-cloudwatch-agent.service || true
 
-echo "Policy loaded. You may need to restart the CloudWatch agent: systemctl restart amazon-cloudwatch-agent"
+echo "Adding environment variable to systemd service"
+
+# Ensure the directory exists
+mkdir -p /etc/systemd/system/amazon-cloudwatch-agent.service.d
+
+# Create the override file with the Environment variable
+cat <<EOF | tee /etc/systemd/system/amazon-cloudwatch-agent.service.d/override.conf
+[Service]
+Environment="RUN_WITH_SELINUX=True"
+EOF
+
+# Reload systemd and restart the CloudWatch agent
+systemctl daemon-reload
+systemctl restart amazon-cloudwatch-agent
+
+echo "Policy loaded. CloudWatch agent should be restarted with the new environment variable: systemctl restart amazon-cloudwatch-agent"
