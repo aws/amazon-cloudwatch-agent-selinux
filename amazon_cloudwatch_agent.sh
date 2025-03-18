@@ -19,12 +19,12 @@ fi
 
 echo "Building and Loading Policy"
 set -x
-sudo make -f /usr/share/selinux/devel/Makefile amazon_cloudwatch_agent.pp || exit
-sudo /usr/sbin/semodule -i amazon_cloudwatch_agent.pp
+make -f /usr/share/selinux/devel/Makefile amazon_cloudwatch_agent.pp || exit
+/usr/sbin/semodule -i amazon_cloudwatch_agent.pp
 
 # Fixing the file context on CloudWatch agent files
-sudo /sbin/restorecon -R -v /opt/aws/amazon-cloudwatch-agent || true
-sudo /sbin/restorecon -v /etc/systemd/system/amazon-cloudwatch-agent.service || true
+/sbin/restorecon -R -v /opt/aws/amazon-cloudwatch-agent || true
+/sbin/restorecon -v /etc/systemd/system/amazon-cloudwatch-agent.service || true
 
 echo "Adding environment variable to systemd service"
 
