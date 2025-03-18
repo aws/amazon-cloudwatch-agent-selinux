@@ -54,5 +54,3 @@ else
         echo "CloudWatch Agent was not restarted. Please restart it manually using: sudo systemctl restart amazon-cloudwatch-agent"
     fi
 fi
-
-echo "Policy loaded. Environment variable applied."
