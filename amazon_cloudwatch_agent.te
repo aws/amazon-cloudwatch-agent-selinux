@@ -1,0 +1,151 @@
+policy_module(amazon_cloudwatch_agent, 1.0.2)
+
+require {
+    type bin_t;
+    type var_run_t;
+    type proc_t;
+    type proc_net_t;
+    type sysfs_t;
+    type fs_t;
+    type cgroup_t;
+    type udev_var_run_t;
+    type var_log_t;
+    type passwd_file_t;
+    type fixed_disk_device_t;
+    type kernel_t;
+    type shadow_t;
+    type httpd_config_t;
+    type init_t;
+    type http_port_t;
+    type sysctl_net_t;
+    type etc_t;
+    type devpts_t;
+    type node_t;
+    type ephemeral_port_t;
+    type tmp_t;
+    type user_tmp_t;
+    type unreserved_port_t;
+    attribute file_type;
+    class file { getattr open read write append create unlink setattr map };
+    class dir { open read write search getattr add_name remove_name setattr create };
+    class lnk_file { read getattr };
+    class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
+    class process { fork setpgid };
+    class system syslog_read;
+    class capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
+    class fifo_file rw_fifo_file_perms;
+    class unix_stream_socket create_stream_socket_perms;
+    class tcp_socket { create_stream_socket_perms name_bind node_bind name_connect };
+    class udp_socket { create setopt connect getattr write read create_socket_perms };
+    class filesystem { getattr };
+    class blk_file { getattr open read };
+}
+
+type amazon_cloudwatch_agent_t;
+type amazon_cloudwatch_agent_exec_t;
+init_daemon_domain(amazon_cloudwatch_agent_t, amazon_cloudwatch_agent_exec_t)
+
+# Basic permissions
+# * Grants Agent
+# -- Ability to fork processes.
+# -- Read/write access to FIFO files (inter-process communication).
+# -- Create and use TCP/UDP sockets.
+# -- Various system capabilities (setuid(Set User ID), setgid(Set Group ID), sys_ptrace(System Process Trace), etc.).
+allow amazon_cloudwatch_agent_t self:process { fork setpgid };
+allow amazon_cloudwatch_agent_t self:fifo_file rw_fifo_file_perms;
+allow amazon_cloudwatch_agent_t self:unix_stream_socket create_stream_socket_perms;
+allow amazon_cloudwatch_agent_t self:tcp_socket create_stream_socket_perms;
+allow amazon_cloudwatch_agent_t self:udp_socket create_socket_perms;
+allow amazon_cloudwatch_agent_t self:capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
+allow amazon_cloudwatch_agent_t init_t:file { getattr open read };
+
+# Network permissions
+# * Grants agent
+# -- Ability to bind to TCP and UDP sockets.
+# -- Connect to unreserved and ephemeral ports.
+# -- Connect to HTTP ports.
+# -- Communicate over netlink route sockets (used for networking configuration).
+allow amazon_cloudwatch_agent_t node_t:tcp_socket node_bind;
+allow amazon_cloudwatch_agent_t node_t:udp_socket node_bind;
+allow amazon_cloudwatch_agent_t unreserved_port_t:tcp_socket { name_connect name_bind };
+allow amazon_cloudwatch_agent_t unreserved_port_t:udp_socket name_bind;
+allow amazon_cloudwatch_agent_t ephemeral_port_t:tcp_socket name_connect;
+allow amazon_cloudwatch_agent_t http_port_t:tcp_socket name_connect;
+allow amazon_cloudwatch_agent_t self:netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
+
+
+# File permissions
+# * Allow the agent to
+# -- Read, open, and search directories.
+# -- Read files and symbolic links.
+# -- Map executable binaries (bin_t).
+allow amazon_cloudwatch_agent_t file_type:dir { read getattr open search };
+allow amazon_cloudwatch_agent_t file_type:file { read getattr open };
+allow amazon_cloudwatch_agent_t file_type:lnk_file { read getattr };
+allow amazon_cloudwatch_agent_t bin_t:file map;
+allow amazon_cloudwatch_agent_t fs_t:filesystem getattr;
+
+# Specific file permissions
+
+# Modify /var/log directories.
+# Create, write, and delete log files.
+allow amazon_cloudwatch_agent_t var_log_t:dir { add_name write remove_name };
+allow amazon_cloudwatch_agent_t var_log_t:file { append open setattr create write unlink };
+
+
+#Allows reading /proc system files
+allow amazon_cloudwatch_agent_t proc_t:dir { read getattr open search };
+allow amazon_cloudwatch_agent_t proc_t:file { read getattr open };
+
+# Grants access to sysfs and cgroup files
+allow amazon_cloudwatch_agent_t sysfs_t:dir { read getattr open search };
+allow amazon_cloudwatch_agent_t sysfs_t:file { read getattr open };
+allow amazon_cloudwatch_agent_t cgroup_t:dir { read getattr open search };
+allow amazon_cloudwatch_agent_t cgroup_t:file { read getattr open };
+
+# Allows reading disk device information
+allow amazon_cloudwatch_agent_t fixed_disk_device_t:blk_file { getattr open read };
+
+# Grants access to configuration files, temporary files, and network settings
+allow amazon_cloudwatch_agent_t etc_t:file { getattr open read };
+allow amazon_cloudwatch_agent_t user_tmp_t:file { open unlink };
+allow amazon_cloudwatch_agent_t sysctl_net_t:dir search;
+allow amazon_cloudwatch_agent_t sysctl_net_t:file { read open getattr };
+
+# Grants access to /dev/pts, /tmp, network files, /etc/passwd, and process-related files
+allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_exec_t:dir { open read write search getattr add_name remove_name setattr create };
+allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_exec_t:file { create open read write getattr unlink execute_no_trans append setattr };
+allow amazon_cloudwatch_agent_t devpts_t:dir { read open getattr search };
+allow amazon_cloudwatch_agent_t devpts_t:file { read open getattr };
+allow amazon_cloudwatch_agent_t tmp_t:dir { read open getattr search };
+allow amazon_cloudwatch_agent_t tmp_t:file { read open getattr };
+allow amazon_cloudwatch_agent_t proc_net_t:file { read open getattr };
+allow amazon_cloudwatch_agent_t proc_net_t:lnk_file read;
+allow amazon_cloudwatch_agent_t udev_var_run_t:file { getattr read open };
+allow amazon_cloudwatch_agent_t passwd_file_t:file { read open getattr };
+allow amazon_cloudwatch_agent_t proc_t:filesystem getattr;
+
+# Kernel and system permissions
+# -- Allows:
+# -- Reading system logs.
+# -- Reading Apache HTTPD configuration fil
+allow amazon_cloudwatch_agent_t kernel_t:system syslog_read;
+allow amazon_cloudwatch_agent_t httpd_config_t:file { getattr open read };
+
+# Allow DNS resolution - Grants permission to perform DNS resolution
+sysnet_dns_name_resolve(amazon_cloudwatch_agent_t)
+
+# Logging - Allows sending syslog messages for logging
+logging_send_syslog_msg(amazon_cloudwatch_agent_t)
+
+# Allow getting attributes of all directories - Allows retrieving attributes of all directories
+files_getattr_all_dirs(amazon_cloudwatch_agent_t)
+
+# Allow the agent to get disk information - Allows reading raw disk information
+storage_raw_read_fixed_disk(amazon_cloudwatch_agent_t)
+
+# Explicitly denies access to /etc/shadow (password storage file), preventing:
+# -- Reading or modifying user passwords.
+neverallow amazon_cloudwatch_agent_t shadow_t:file { getattr read write open };
+neverallow amazon_cloudwatch_agent_t shadow_t:dir { getattr read write open };
+neverallow amazon_cloudwatch_agent_t shadow_t:lnk_file { getattr read write open };
