@@ -6,6 +6,7 @@ require {
     type proc_t;
     type proc_net_t;
     type sysfs_t;
+    type fs_t;
     type cgroup_t;
     type udev_var_run_t;
     type var_log_t;
@@ -14,6 +15,7 @@ require {
     type kernel_t;
     type shadow_t;
     type httpd_config_t;
+    type init_t;
     type http_port_t;
     type sysctl_net_t;
     type etc_t;
@@ -25,7 +27,7 @@ require {
     type unreserved_port_t;
     attribute file_type;
     class file { getattr open read write append create unlink setattr map };
-    class dir { open read write search getattr add_name remove_name setattr };
+    class dir { open read write search getattr add_name remove_name setattr create };
     class lnk_file { read getattr };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
     class process { fork setpgid };
@@ -55,6 +57,7 @@ allow amazon_cloudwatch_agent_t self:unix_stream_socket create_stream_socket_per
 allow amazon_cloudwatch_agent_t self:tcp_socket create_stream_socket_perms;
 allow amazon_cloudwatch_agent_t self:udp_socket create_socket_perms;
 allow amazon_cloudwatch_agent_t self:capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
+allow amazon_cloudwatch_agent_t init_t:file { getattr open read };
 
 # Network permissions
 # * Grants agent
@@ -71,7 +74,6 @@ allow amazon_cloudwatch_agent_t http_port_t:tcp_socket name_connect;
 allow amazon_cloudwatch_agent_t self:netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
 
 
-
 # File permissions
 # * Allow the agent to
 # -- Read, open, and search directories.
@@ -81,6 +83,7 @@ allow amazon_cloudwatch_agent_t file_type:dir { read getattr open search };
 allow amazon_cloudwatch_agent_t file_type:file { read getattr open };
 allow amazon_cloudwatch_agent_t file_type:lnk_file { read getattr };
 allow amazon_cloudwatch_agent_t bin_t:file map;
+allow amazon_cloudwatch_agent_t fs_t:filesystem getattr;
 
 # Specific file permissions
 
@@ -110,7 +113,7 @@ allow amazon_cloudwatch_agent_t sysctl_net_t:dir search;
 allow amazon_cloudwatch_agent_t sysctl_net_t:file { read open getattr };
 
 # Grants access to /dev/pts, /tmp, network files, /etc/passwd, and process-related files
-allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_exec_t:dir { open read write search getattr add_name remove_name setattr };
+allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_exec_t:dir { open read write search getattr add_name remove_name setattr create };
 allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_exec_t:file { create open read write getattr unlink execute_no_trans append setattr };
 allow amazon_cloudwatch_agent_t devpts_t:dir { read open getattr search };
 allow amazon_cloudwatch_agent_t devpts_t:file { read open getattr };
