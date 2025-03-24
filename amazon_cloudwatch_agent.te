@@ -93,7 +93,7 @@ allow amazon_cloudwatch_agent_t self:udp_socket create_socket_perms;
 allow amazon_cloudwatch_agent_t self:capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
 allow amazon_cloudwatch_agent_t init_t:file { getattr open read };
 
-//Amp Permissions
+#Amp Permissions
 allow amazon_cloudwatch_agent_t apmd_t:dir getattr;
 allow amazon_cloudwatch_agent_t auditd_t:dir getattr;
 allow amazon_cloudwatch_agent_t cgroup_t:filesystem getattr;
