@@ -41,6 +41,12 @@ require {
     type postfix_qmgr_t;
     type postfix_master_t;
     type rngd_t;
+    type bpf_t;
+    type efivarfs_t;
+    type tracefs_t;
+    type dosfs_t;
+    type configfs_t;
+    type fusefs_t;
     type udev_var_run_t;
     type var_log_t;
     type passwd_file_t;
@@ -59,7 +65,7 @@ require {
     type user_tmp_t;
     type unreserved_port_t;
     attribute file_type;
-    class file { getattr open read write append create unlink setattr map };
+    class file { getattr open read write append create unlink setattr map ioctl };
     class dir { open read write search getattr add_name remove_name setattr create };
     class lnk_file { read getattr };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
@@ -182,7 +188,7 @@ allow amazon_cloudwatch_agent_t sysctl_net_t:file { read open getattr };
 
 # Grants access to /dev/pts, /tmp, network files, /etc/passwd, and process-related files
 allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_exec_t:dir { open read write search getattr add_name remove_name setattr create };
-allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_exec_t:file { create open read write getattr unlink execute_no_trans append setattr };
+allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_exec_t:file { create open read write getattr unlink execute_no_trans append setattr ioctl };
 allow amazon_cloudwatch_agent_t devpts_t:dir { read open getattr search };
 allow amazon_cloudwatch_agent_t devpts_t:file { read open getattr };
 allow amazon_cloudwatch_agent_t devpts_t:filesystem getattr;
@@ -193,6 +199,13 @@ allow amazon_cloudwatch_agent_t proc_net_t:lnk_file read;
 allow amazon_cloudwatch_agent_t udev_var_run_t:file { getattr read open };
 allow amazon_cloudwatch_agent_t passwd_file_t:file { read open getattr };
 allow amazon_cloudwatch_agent_t proc_t:filesystem getattr;
+allow amazon_cloudwatch_agent_t bpf_t:filesystem getattr;
+allow amazon_cloudwatch_agent_t configfs_t:filesystem getattr;
+allow amazon_cloudwatch_agent_t dosfs_t:filesystem getattr;
+allow amazon_cloudwatch_agent_t efivarfs_t:filesystem getattr;
+allow amazon_cloudwatch_agent_t fusefs_t:filesystem getattr;
+allow amazon_cloudwatch_agent_t tmp_t:dir remove_name;
+allow amazon_cloudwatch_agent_t tracefs_t:filesystem getattr;
 
 # Kernel and system permissions
 # -- Allows:
