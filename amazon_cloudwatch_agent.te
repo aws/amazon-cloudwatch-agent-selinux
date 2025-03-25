@@ -246,7 +246,6 @@ storage_raw_read_fixed_disk(amazon_cloudwatch_agent_t)
 # This is for AL2023 perm which is why it is optional (This will not be applied for AL2 which is expected)
 optional {
   require {
-        type amazon_cloudwatch_agent_t;
         type bpf_t;
         type cgroup_t;
         type configfs_t;
