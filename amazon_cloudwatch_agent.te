@@ -243,49 +243,6 @@ files_getattr_all_dirs(amazon_cloudwatch_agent_t)
 # Allow the agent to get disk information - Allows reading raw disk information
 storage_raw_read_fixed_disk(amazon_cloudwatch_agent_t)
 
-# This is for AL2023 perm which is why it is optional (This will not be applied for AL2 which is expected)
-optional {
-  require {
-        type bpf_t;
-        type cgroup_t;
-        type configfs_t;
-        type debugfs_t;
-        type device_t;
-        type devpts_t;
-        type dosfs_t;
-        type efivarfs_t;
-        type fs_t;
-        type fusefs_t;
-        type hugetlbfs_t;
-        type pstore_t;
-        type rpc_pipefs_t;
-        type tmp_t;
-        type tmpfs_t;
-        type tracefs_t;
-        class filesystem getattr;
-        class dir write;
-    }
-
-    # These rules will be included if the types exist, otherwise they'll be silently ignored
-    allow amazon_cloudwatch_agent_t bpf_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t cgroup_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t configfs_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t debugfs_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t device_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t devpts_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t dosfs_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t efivarfs_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t fs_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t fusefs_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t hugetlbfs_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t pstore_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t rpc_pipefs_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t tmp_t:dir write;
-    allow amazon_cloudwatch_agent_t tmpfs_t:filesystem getattr;
-    allow amazon_cloudwatch_agent_t tracefs_t:filesystem getattr;
-}
-
-
 # Explicitly denies access to /etc/shadow (password storage file), preventing:
 # -- Reading or modifying user passwords.
 neverallow amazon_cloudwatch_agent_t shadow_t:file { getattr read write open };
