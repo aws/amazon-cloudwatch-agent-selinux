@@ -28,9 +28,6 @@ require {
     type debugfs_t;
     type pstore_t;
     type syslogd_t;
-    type bpf_t;
-    type tracefs_t;
-    type fusefs_t;
     type udev_t;
     type systemd_logind_t;
     type chronyd_t;
@@ -201,9 +198,6 @@ allow amazon_cloudwatch_agent_t proc_net_t:lnk_file read;
 allow amazon_cloudwatch_agent_t udev_var_run_t:file { getattr read open };
 allow amazon_cloudwatch_agent_t passwd_file_t:file { read open getattr };
 allow amazon_cloudwatch_agent_t proc_t:filesystem getattr;
-allow amazon_cloudwatch_agent_t bpf_t:filesystem getattr;
-allow amazon_cloudwatch_agent_t fusefs_t:filesystem getattr;
-allow amazon_cloudwatch_agent_t tracefs_t:filesystem getattr;
 
 # Kernel and system permissions
 # -- Allows:
