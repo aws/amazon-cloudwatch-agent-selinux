@@ -43,7 +43,6 @@ require {
     type rngd_t;
     type bpf_t;
     type efivarfs_t;
-    type tracefs_t;
     type dosfs_t;
     type configfs_t;
     type fusefs_t;
@@ -205,7 +204,6 @@ allow amazon_cloudwatch_agent_t dosfs_t:filesystem getattr;
 allow amazon_cloudwatch_agent_t efivarfs_t:filesystem getattr;
 allow amazon_cloudwatch_agent_t fusefs_t:filesystem getattr;
 allow amazon_cloudwatch_agent_t tmp_t:dir remove_name;
-allow amazon_cloudwatch_agent_t tracefs_t:filesystem getattr;
 
 # Kernel and system permissions
 # -- Allows:
