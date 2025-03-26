@@ -66,7 +66,7 @@ require {
     attribute file_type;
     class file { getattr open read write append create unlink setattr map ioctl search };
     class dir { open read write search getattr add_name remove_name setattr create };
-    class lnk_file { read getattr search open getattr write };
+    class lnk_file { read getattr open getattr write };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
     class process { fork setpgid };
     class system syslog_read;
