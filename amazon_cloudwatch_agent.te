@@ -182,8 +182,8 @@ allow amazon_cloudwatch_agent_t unconfined_service_t:lnk_file { read open search
 
 
 # might remove
-allow rngd_t cert_t:dir search;
-allow setfiles_t dhcpc_var_run_t:file write;
+# allow rngd_t cert_t:dir search;
+# allow setfiles_t dhcpc_var_run_t:file write;
 
 # Network permissions
 # * Grants agent
