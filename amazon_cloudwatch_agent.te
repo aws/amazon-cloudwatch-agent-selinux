@@ -66,7 +66,7 @@ require {
     attribute file_type;
     class file { getattr open read write append create unlink setattr map ioctl search };
     class dir { open read write search getattr add_name remove_name setattr create };
-    class lnk_file { read getattr search };
+    class lnk_file { read getattr search open getattr write };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
     class process { fork setpgid };
     class system syslog_read;
@@ -182,8 +182,8 @@ allow amazon_cloudwatch_agent_t unconfined_service_t:lnk_file { read open search
 
 
 # might remove
-# allow rngd_t cert_t:dir search;
-# allow setfiles_t dhcpc_var_run_t:file write;
+allow rngd_t cert_t:dir search;
+allow setfiles_t dhcpc_var_run_t:file write;
 
 # Network permissions
 # * Grants agent
