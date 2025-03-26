@@ -69,8 +69,7 @@ require {
     class dir { open read write search getattr add_name remove_name setattr create };
     class lnk_file { read getattr open getattr write };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
-    class process { fork setpgid };
-    class execmem;
+    class process { fork setpgid execmem };
     class chr_file { getattr open read };
     class system syslog_read;
     class capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
