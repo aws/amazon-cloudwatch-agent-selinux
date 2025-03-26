@@ -64,7 +64,7 @@ require {
     type user_tmp_t;
     type unreserved_port_t;
     attribute file_type;
-    class file { getattr open read write append create unlink setattr map ioctl };
+    class file { getattr open read write append create unlink setattr map ioctl search };
     class dir { open read write search getattr add_name remove_name setattr create };
     class lnk_file { read getattr };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
