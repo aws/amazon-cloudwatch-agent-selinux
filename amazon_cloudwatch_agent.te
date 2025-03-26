@@ -19,6 +19,7 @@ require {
     type setfiles_t;
     type system_dbusd_t;
     type rpc_pipefs_t;
+    type random_device_t;
     type postfix_pickup_t;
     type dhcpc_var_run_t;
     type hugetlbfs_t;
