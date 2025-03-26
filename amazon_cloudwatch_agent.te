@@ -111,7 +111,7 @@ allow amazon_cloudwatch_agent_t chronyd_t:dir { getattr search read open };
 allow amazon_cloudwatch_agent_t chronyd_t:file { read open search getattr write };
 allow amazon_cloudwatch_agent_t chronyd_t:lnk_file { read open search getattr write };
 # allow amazon_cloudwatch_agent_t crond_t:dir { getattr read open };
-allow amazon_cloudwatch_agent_t crond_t:lnk_file { read open search getattr write };
+# allow amazon_cloudwatch_agent_t crond_t:lnk_file { read open search getattr write };
 allow amazon_cloudwatch_agent_t debugfs_t:filesystem getattr;
 allow amazon_cloudwatch_agent_t device_t:filesystem getattr;
 allow amazon_cloudwatch_agent_t dhcpc_t:dir { getattr search read open };
