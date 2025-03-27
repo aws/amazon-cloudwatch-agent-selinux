@@ -103,7 +103,6 @@ allow amazon_cloudwatch_agent_t collectd_port_t:udp_socket name_bind;
 allow amazon_cloudwatch_agent_t self:udp_socket create_socket_perms;
 allow amazon_cloudwatch_agent_t self:capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
 allow amazon_cloudwatch_agent_t init_t:file { getattr open read };
-allow amazon_cloudwatch_agent_t rpm_script_t:dir search;
 allow amazon_cloudwatch_agent_t apmd_t:dir { getattr search read open };
 allow amazon_cloudwatch_agent_t apmd_t:file { read open getattr write };
 allow amazon_cloudwatch_agent_t apmd_t:lnk_file { read open getattr write };
