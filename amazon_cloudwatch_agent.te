@@ -8,6 +8,7 @@ require {
     type sysfs_t;
     type unconfined_t;
     type fs_t;
+    type mail_port_t;
     type cgroup_t;
     type rpcbind_t;
     type cloud_init_t;
@@ -97,6 +98,7 @@ allow amazon_cloudwatch_agent_t self:process { fork setpgid execmem };
 allow amazon_cloudwatch_agent_t self:fifo_file rw_fifo_file_perms;
 allow amazon_cloudwatch_agent_t self:unix_stream_socket create_stream_socket_perms;
 allow amazon_cloudwatch_agent_t self:tcp_socket create_stream_socket_perms;
+allow amazon_cloudwatch_agent_t mail_port_t:tcp_socket name_connect;
 allow amazon_cloudwatch_agent_t collectd_port_t:udp_socket name_bind;
 allow amazon_cloudwatch_agent_t self:udp_socket create_socket_perms;
 allow amazon_cloudwatch_agent_t self:capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
@@ -182,9 +184,6 @@ allow amazon_cloudwatch_agent_t unconfined_t:file { read open getattr write };
 allow amazon_cloudwatch_agent_t unconfined_service_t:file { read open getattr write };
 allow amazon_cloudwatch_agent_t unconfined_t:lnk_file { read open getattr write };
 allow amazon_cloudwatch_agent_t unconfined_service_t:lnk_file { read open getattr write };
-
-
-# might remove
 allow rngd_t cert_t:dir search;
 allow setfiles_t dhcpc_var_run_t:file write;
 
