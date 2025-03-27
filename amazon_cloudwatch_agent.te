@@ -302,7 +302,6 @@ optional {
     }
 
     # These rules will be included if the types exist, otherwise they'll be silently ignored
-    allow amazon_cloudwatch_agent_t statsd_port_t:udp_socket name_bind;
     allow amazon_cloudwatch_agent_t bpf_t:filesystem getattr;
     allow amazon_cloudwatch_agent_t cgroup_t:filesystem getattr;
     allow amazon_cloudwatch_agent_t configfs_t:filesystem getattr;
