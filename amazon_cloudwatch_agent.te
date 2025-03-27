@@ -62,13 +62,6 @@ require {
     type node_t;
     type sshd_net_t;
     type ephemeral_port_t;
-    type initrc_t;
-    type mandb_t;
-    type rpm_script_t;
-    type systemd_networkd_t;
-    type systemd_hostnamed_t;
-    type systemd_resolved_t;
-    type systemd_userdbd_t;
     type tmp_t;
     type user_tmp_t;
     type unreserved_port_t;
@@ -115,10 +108,7 @@ allow amazon_cloudwatch_agent_t init_t:file { getattr open read };
 allow amazon_cloudwatch_agent_t initrc_t:dir search;
 allow amazon_cloudwatch_agent_t initrc_t:dir search;
 allow amazon_cloudwatch_agent_t mandb_t:dir search;
-allow amazon_cloudwatch_agent_t systemd_hostnamed_t:dir search;
-allow amazon_cloudwatch_agent_t systemd_networkd_t:dir search;
-allow amazon_cloudwatch_agent_t systemd_resolved_t:dir search;
-allow amazon_cloudwatch_agent_t systemd_userdbd_t:dir search;
+
 
 allow amazon_cloudwatch_agent_t rpm_script_t:dir search;
 allow amazon_cloudwatch_agent_t apmd_t:dir { getattr search read open };
@@ -311,6 +301,13 @@ optional {
         type pstore_t;
         type rpc_pipefs_t;
         type statsd_port_t;
+        type systemd_networkd_t;
+        type systemd_hostnamed_t;
+        type systemd_resolved_t;
+        type systemd_userdbd_t;
+        type initrc_t;
+        type mandb_t;
+        type rpm_script_t;
         type tmp_t;
         type tmpfs_t;
         type tracefs_t;
@@ -319,6 +316,14 @@ optional {
     }
 
     # These rules will be included if the types exist, otherwise they'll be silently ignored
+    allow amazon_cloudwatch_agent_t systemd_hostnamed_t:dir search;
+    allow amazon_cloudwatch_agent_t systemd_networkd_t:dir search;
+    allow amazon_cloudwatch_agent_t systemd_resolved_t:dir search;
+    allow amazon_cloudwatch_agent_t systemd_userdbd_t:dir search;
+    allow amazon_cloudwatch_agent_t initrc_t:dir search;
+    allow amazon_cloudwatch_agent_t initrc_t:dir search;
+    allow amazon_cloudwatch_agent_t mandb_t:dir search;
+    allow amazon_cloudwatch_agent_t rpm_script_t:dir search;
     allow amazon_cloudwatch_agent_t statsd_port_t:udp_socket name_bind;
     allow amazon_cloudwatch_agent_t bpf_t:filesystem getattr;
     allow amazon_cloudwatch_agent_t cgroup_t:filesystem getattr;
