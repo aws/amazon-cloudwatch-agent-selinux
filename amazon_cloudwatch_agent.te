@@ -32,6 +32,7 @@ require {
     type syslogd_t;
     type udev_t;
     type systemd_logind_t;
+    type statsd_port_t;
     type chronyd_t;
     type tmpfs_t;
     type gssproxy_t;
@@ -78,7 +79,7 @@ require {
     class fifo_file rw_fifo_file_perms;
     class unix_stream_socket create_stream_socket_perms;
     class tcp_socket { create_stream_socket_perms name_bind node_bind name_connect };
-    class udp_socket { create setopt connect getattr write read create_socket_perms };
+    class udp_socket { create setopt connect getattr write read create_socket_perms name_bind };
     class filesystem { getattr };
     class blk_file { getattr open read };
     class dbus send_msg;
@@ -101,6 +102,7 @@ allow amazon_cloudwatch_agent_t self:tcp_socket create_stream_socket_perms;
 allow amazon_cloudwatch_agent_t mail_port_t:tcp_socket name_connect;
 allow amazon_cloudwatch_agent_t collectd_port_t:udp_socket name_bind;
 allow amazon_cloudwatch_agent_t self:udp_socket create_socket_perms;
+allow amazon_cloudwatch_agent_t statsd_port_t:udp_socket name_bind;
 allow amazon_cloudwatch_agent_t self:capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
 allow amazon_cloudwatch_agent_t init_t:file { getattr open read };
 
