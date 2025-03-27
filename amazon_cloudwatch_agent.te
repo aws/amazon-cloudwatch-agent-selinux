@@ -294,7 +294,6 @@ optional {
         type hugetlbfs_t;
         type pstore_t;
         type rpc_pipefs_t;
-        type statsd_port_t;
         type tmp_t;
         type tmpfs_t;
         type tracefs_t;
