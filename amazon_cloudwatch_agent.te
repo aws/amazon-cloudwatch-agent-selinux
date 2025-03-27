@@ -32,7 +32,6 @@ require {
     type syslogd_t;
     type udev_t;
     type systemd_logind_t;
-    type statsd_port_t;
     type chronyd_t;
     type tmpfs_t;
     type gssproxy_t;
@@ -294,6 +293,7 @@ optional {
         type hugetlbfs_t;
         type pstore_t;
         type rpc_pipefs_t;
+        type statsd_port_t;
         type tmp_t;
         type tmpfs_t;
         type tracefs_t;
@@ -302,6 +302,7 @@ optional {
     }
 
     # These rules will be included if the types exist, otherwise they'll be silently ignored
+    allow amazon_cloudwatch_agent_t statsd_port_t:udp_socket name_bind;
     allow amazon_cloudwatch_agent_t bpf_t:filesystem getattr;
     allow amazon_cloudwatch_agent_t cgroup_t:filesystem getattr;
     allow amazon_cloudwatch_agent_t configfs_t:filesystem getattr;
