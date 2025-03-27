@@ -125,7 +125,7 @@ allow amazon_cloudwatch_agent_t lsmd_t:dir { getattr search read };
 allow amazon_cloudwatch_agent_t lsmd_t:lnk_file read;
 allow amazon_cloudwatch_agent_t lvm_t:dir { getattr search read };
 allow amazon_cloudwatch_agent_t lvm_t:lnk_file read;
-allow amazon_cloudwatch_agent_t nvme_device_t:blk_file getattr;
+allow amazon_cloudwatch_agent_t nvme_device_t:blk_file { getattr ioctl open read write };
 allow amazon_cloudwatch_agent_t monopd_port_t:tcp_socket name_bind;
 allow amazon_cloudwatch_agent_t postfix_master_t:dir { getattr search read };
 allow amazon_cloudwatch_agent_t postfix_master_t:lnk_file read;
