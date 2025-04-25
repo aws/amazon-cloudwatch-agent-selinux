@@ -234,7 +234,7 @@ allow amazon_cloudwatch_agent_t sshd_t:dir { getattr search read };
 allow amazon_cloudwatch_agent_t sshd_t:lnk_file read;
 allow amazon_cloudwatch_agent_t syslogd_t:dir { getattr search };
 allow amazon_cloudwatch_agent_t syslogd_t:lnk_file read;
-allow amazon_cloudwatch_agent_t system_cronjob_t:dir getattr;
+allow amazon_cloudwatch_agent_t system_cronjob_t:dir { getattr open };
 allow amazon_cloudwatch_agent_t system_dbusd_t:dir { getattr search read };
 allow amazon_cloudwatch_agent_t system_dbusd_t:lnk_file read;
 allow amazon_cloudwatch_agent_t systemd_logind_t:dir { getattr search };
@@ -324,6 +324,7 @@ allow amazon_cloudwatch_agent_t proc_t:filesystem getattr;
 # -- Reading Apache HTTPD configuration fil
 allow amazon_cloudwatch_agent_t kernel_t:system syslog_read;
 allow amazon_cloudwatch_agent_t httpd_config_t:file { getattr open read };
+allow init_t amazon_cloudwatch_agent_exec_t:file ioctl;
 
 # Allow DNS resolution - Grants permission to perform DNS resolution
 sysnet_dns_name_resolve(amazon_cloudwatch_agent_t)
