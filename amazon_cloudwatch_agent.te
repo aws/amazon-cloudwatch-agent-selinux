@@ -78,7 +78,7 @@ require {
     class capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
     class fifo_file rw_fifo_file_perms;
     class unix_stream_socket create_stream_socket_perms;
-    class tcp_socket { create_stream_socket_perms name_bind node_bind name_connect };
+    class tcp_socket { create_stream_socket_perms name_bind node_bind name_connect listen accept setopt create };
     class udp_socket { create setopt connect getattr write read create_socket_perms name_bind };
     class filesystem { getattr };
     class blk_file { getattr open read };
@@ -98,7 +98,7 @@ init_daemon_domain(amazon_cloudwatch_agent_t, amazon_cloudwatch_agent_exec_t)
 allow amazon_cloudwatch_agent_t self:process { fork setpgid execmem };
 allow amazon_cloudwatch_agent_t self:fifo_file rw_fifo_file_perms;
 allow amazon_cloudwatch_agent_t self:unix_stream_socket create_stream_socket_perms;
-allow amazon_cloudwatch_agent_t self:tcp_socket create_stream_socket_perms;
+allow amazon_cloudwatch_agent_t self:tcp_socket { create_stream_socket_perms listen accept bine setopt create };
 allow amazon_cloudwatch_agent_t mail_port_t:tcp_socket name_connect;
 allow amazon_cloudwatch_agent_t collectd_port_t:udp_socket name_bind;
 allow amazon_cloudwatch_agent_t self:udp_socket create_socket_perms;
@@ -260,7 +260,8 @@ allow amazon_cloudwatch_agent_t unreserved_port_t:udp_socket name_bind;
 allow amazon_cloudwatch_agent_t ephemeral_port_t:tcp_socket name_connect;
 allow amazon_cloudwatch_agent_t http_port_t:tcp_socket name_connect;
 allow amazon_cloudwatch_agent_t self:netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
-
+allow amazon_cloudwatch_agent_t port_t:tcp_socket name_bind;
+allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_port_t:tcp_socket { name_bind name_connect };
 
 # File permissions
 # * Allow the agent to
