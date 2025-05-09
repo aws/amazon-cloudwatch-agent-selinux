@@ -8,6 +8,7 @@ require {
     type sysfs_t;
     type unconfined_t;
     type fs_t;
+    type port_t;
     type mail_port_t;
     type cgroup_t;
     type rpcbind_t;
