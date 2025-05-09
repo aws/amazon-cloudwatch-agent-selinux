@@ -23,8 +23,6 @@ require {
     type rpc_pipefs_t;
     type random_device_t;
     type postfix_pickup_t;
-    type chkpwd_t;
-    type user_devpts_t;
     type dhcpc_var_run_t;
     type hugetlbfs_t;
     type irqbalance_t;
@@ -75,7 +73,7 @@ require {
     class lnk_file { read getattr open getattr write };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
     class process { fork setpgid execmem };
-    class chr_file { getattr open read write };
+    class chr_file { getattr open };
     class system syslog_read;
     class rawip_socket create;
     class capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
@@ -400,8 +398,6 @@ optional {
     allow amazon_cloudwatch_agent_t tmpfs_t:filesystem getattr;
     allow amazon_cloudwatch_agent_t tracefs_t:filesystem getattr;
 }
-
-allow chkpwd_t user_devpts_t:chr_file { read write };
 
 # Explicitly denies access to /etc/shadow (password storage file), preventing:
 # -- Reading or modifying user passwords.
