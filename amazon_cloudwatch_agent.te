@@ -81,7 +81,7 @@ require {
     class capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
     class fifo_file rw_fifo_file_perms;
     class unix_stream_socket create_stream_socket_perms;
-    class tcp_socket { create_stream_socket_perms name_bind node_bind name_connect listen accept setopt create };
+    class tcp_socket { create_stream_socket_perms name_bind node_bind name_connect listen accept setopt create read write };
     class udp_socket { create setopt connect getattr write read create_socket_perms name_bind };
     class filesystem { getattr };
     class blk_file { getattr open read };
@@ -135,6 +135,7 @@ allow amazon_cloudwatch_agent_t irqbalance_t:lnk_file { read open getattr write 
 allow amazon_cloudwatch_agent_t kernel_t:dir { getattr search read open open };
 allow amazon_cloudwatch_agent_t kernel_t:file { read open getattr write };
 allow amazon_cloudwatch_agent_t kernel_t:lnk_file { read open getattr write };
+allow amazon_cloudwatch_agent_t kernel_t:tcp_socket { read write };
 allow amazon_cloudwatch_agent_t lsmd_t:dir { getattr search read open };
 allow amazon_cloudwatch_agent_t lsmd_t:file { read open getattr write };
 allow amazon_cloudwatch_agent_t lsmd_t:lnk_file { read open getattr write };
@@ -328,6 +329,7 @@ allow amazon_cloudwatch_agent_t proc_t:filesystem getattr;
 allow amazon_cloudwatch_agent_t kernel_t:system syslog_read;
 allow amazon_cloudwatch_agent_t httpd_config_t:file { getattr open read };
 allow init_t amazon_cloudwatch_agent_exec_t:file ioctl;
+allow amazon_cloudwatch_agent_t init_t:dir search;
 
 # Allow DNS resolution - Grants permission to perform DNS resolution
 sysnet_dns_name_resolve(amazon_cloudwatch_agent_t)
