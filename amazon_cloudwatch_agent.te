@@ -279,7 +279,7 @@ allow amazon_cloudwatch_agent_t fs_t:filesystem getattr;
 
 # Modify /var/log directories.
 # Create, write, and delete log files.
-allow amazon_cloudwatch_agent_t var_log_t:dir { add_name write remove_name };
+allow amazon_cloudwatch_agent_t var_log_t:dir { add_name write remove_name setattr };
 allow amazon_cloudwatch_agent_t var_log_t:file { append open setattr create write unlink };
 
 
