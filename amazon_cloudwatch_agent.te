@@ -262,7 +262,6 @@ allow amazon_cloudwatch_agent_t ephemeral_port_t:tcp_socket name_connect;
 allow amazon_cloudwatch_agent_t http_port_t:tcp_socket name_connect;
 allow amazon_cloudwatch_agent_t self:netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
 allow amazon_cloudwatch_agent_t port_t:tcp_socket name_bind;
-allow amazon_cloudwatch_agent_t amazon_cloudwatch_agent_port_t:tcp_socket { name_bind name_connect };
 
 # File permissions
 # * Allow the agent to
