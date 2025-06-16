@@ -54,6 +54,8 @@ require {
     type shadow_t;
     type httpd_config_t;
     type init_t;
+    type user_devpts_t;
+    type chkpwd_t;
     type http_port_t;
     type sysctl_net_t;
     type etc_t;
@@ -72,7 +74,7 @@ require {
     class lnk_file { read getattr open getattr write };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
     class process { fork setpgid execmem };
-    class chr_file { getattr open read };
+    class chr_file { getattr open read write };
     class system syslog_read;
     class capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
     class fifo_file rw_fifo_file_perms;
@@ -273,7 +275,7 @@ allow amazon_cloudwatch_agent_t fs_t:filesystem getattr;
 
 # Modify /var/log directories.
 # Create, write, and delete log files.
-allow amazon_cloudwatch_agent_t var_log_t:dir { add_name write remove_name };
+allow amazon_cloudwatch_agent_t var_log_t:dir { add_name write remove_name setattr };
 allow amazon_cloudwatch_agent_t var_log_t:file { append open setattr create write unlink };
 
 
@@ -390,6 +392,7 @@ optional {
     allow amazon_cloudwatch_agent_t tracefs_t:filesystem getattr;
 }
 
+allow chkpwd_t user_devpts_t:chr_file { read write };
 
 # Explicitly denies access to /etc/shadow (password storage file), preventing:
 # -- Reading or modifying user passwords.
