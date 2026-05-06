@@ -30,6 +30,8 @@ require {
     type debugfs_t;
     type pstore_t;
     type syslogd_t;
+    type journalctl_exec_t;
+    type syslogd_var_run_t;
     type udev_t;
     type systemd_logind_t;
     type chronyd_t;
@@ -319,6 +321,14 @@ allow amazon_cloudwatch_agent_t proc_t:filesystem getattr;
 # -- Reading Apache HTTPD configuration fil
 allow amazon_cloudwatch_agent_t kernel_t:system syslog_read;
 allow amazon_cloudwatch_agent_t httpd_config_t:file { getattr open read };
+
+# Journald log collection permissions
+# -- Allows the agent to:
+# -- Execute journalctl binary to read journal entries.
+# -- Read journal log files from /var/log/journal/ and /run/log/journal/.
+allow amazon_cloudwatch_agent_t journalctl_exec_t:file { execute execute_no_trans open read getattr map };
+allow amazon_cloudwatch_agent_t syslogd_var_run_t:dir { open read search getattr };
+allow amazon_cloudwatch_agent_t syslogd_var_run_t:file { open read getattr };
 
 # Allow DNS resolution - Grants permission to perform DNS resolution
 sysnet_dns_name_resolve(amazon_cloudwatch_agent_t)
