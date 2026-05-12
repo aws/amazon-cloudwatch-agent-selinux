@@ -69,7 +69,7 @@ require {
     attribute file_type;
     class sock_file { create rename setattr unlink };
     class file { getattr open read write append create unlink setattr map ioctl search execute execute_no_trans };
-    class dir { open read write search getattr add_name remove_name setattr create };
+    class dir { open read write search getattr add_name remove_name setattr create watch };
     class lnk_file { read getattr open getattr write };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
     class process { fork setpgid execmem };
@@ -95,7 +95,7 @@ init_daemon_domain(amazon_cloudwatch_agent_t, amazon_cloudwatch_agent_exec_t)
 # -- Read/write access to FIFO files (inter-process communication).
 # -- Create and use TCP/UDP sockets.
 # -- Various system capabilities (setuid(Set User ID), setgid(Set Group ID), sys_ptrace(System Process Trace), etc.).
-allow amazon_cloudwatch_agent_t self:process { fork setpgid execmem };
+allow amazon_cloudwatch_agent_t self:process { fork setpgid execmem setrlimit };
 allow amazon_cloudwatch_agent_t self:fifo_file rw_fifo_file_perms;
 allow amazon_cloudwatch_agent_t self:unix_stream_socket create_stream_socket_perms;
 allow amazon_cloudwatch_agent_t self:tcp_socket create_stream_socket_perms;
@@ -275,7 +275,7 @@ allow amazon_cloudwatch_agent_t fs_t:filesystem getattr;
 
 # Modify /var/log directories.
 # Create, write, and delete log files.
-allow amazon_cloudwatch_agent_t var_log_t:dir { add_name write remove_name };
+allow amazon_cloudwatch_agent_t var_log_t:dir { add_name write remove_name watch };
 allow amazon_cloudwatch_agent_t var_log_t:file { append open setattr create write unlink map };
 
 
@@ -333,7 +333,7 @@ optional {
     require {
         type syslogd_var_run_t;
     }
-    allow amazon_cloudwatch_agent_t syslogd_var_run_t:dir { open read search getattr };
+    allow amazon_cloudwatch_agent_t syslogd_var_run_t:dir { open read search getattr watch };
     allow amazon_cloudwatch_agent_t syslogd_var_run_t:file { open read getattr };
 }
 
