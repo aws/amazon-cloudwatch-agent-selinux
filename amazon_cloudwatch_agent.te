@@ -1,4 +1,4 @@
-policy_module(amazon_cloudwatch_agent, 1.0.2)
+policy_module(amazon_cloudwatch_agent, 1.1.0)
 
 require {
     type bin_t;
