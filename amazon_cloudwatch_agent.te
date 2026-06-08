@@ -1,4 +1,4 @@
-policy_module(amazon_cloudwatch_agent, 1.0.2)
+policy_module(amazon_cloudwatch_agent, 1.1.0)
 
 require {
     type bin_t;
@@ -30,6 +30,7 @@ require {
     type debugfs_t;
     type pstore_t;
     type syslogd_t;
+    type journalctl_exec_t;
     type udev_t;
     type systemd_logind_t;
     type chronyd_t;
@@ -68,7 +69,7 @@ require {
     attribute file_type;
     class sock_file { create rename setattr unlink };
     class file { getattr open read write append create unlink setattr map ioctl search execute execute_no_trans };
-    class dir { open read write search getattr add_name remove_name setattr create };
+    class dir { open read write search getattr add_name remove_name setattr create watch };
     class lnk_file { read getattr open getattr write };
     class netlink_route_socket { create bind write read nlmsg_read nlmsg_write getattr };
     class process { fork setpgid execmem };
@@ -94,15 +95,16 @@ init_daemon_domain(amazon_cloudwatch_agent_t, amazon_cloudwatch_agent_exec_t)
 # -- Read/write access to FIFO files (inter-process communication).
 # -- Create and use TCP/UDP sockets.
 # -- Various system capabilities (setuid(Set User ID), setgid(Set Group ID), sys_ptrace(System Process Trace), etc.).
-allow amazon_cloudwatch_agent_t self:process { fork setpgid execmem };
+allow amazon_cloudwatch_agent_t self:process { fork setpgid execmem setrlimit };
 allow amazon_cloudwatch_agent_t self:fifo_file rw_fifo_file_perms;
 allow amazon_cloudwatch_agent_t self:unix_stream_socket create_stream_socket_perms;
 allow amazon_cloudwatch_agent_t self:tcp_socket create_stream_socket_perms;
 allow amazon_cloudwatch_agent_t mail_port_t:tcp_socket name_connect;
 allow amazon_cloudwatch_agent_t collectd_port_t:udp_socket name_bind;
 allow amazon_cloudwatch_agent_t self:udp_socket create_socket_perms;
-allow amazon_cloudwatch_agent_t self:capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search };
+allow amazon_cloudwatch_agent_t self:capability { net_admin chown dac_override setgid setuid sys_ptrace dac_read_search sys_resource };
 allow amazon_cloudwatch_agent_t init_t:file { getattr open read };
+allow amazon_cloudwatch_agent_t init_t:dir { search };
 allow amazon_cloudwatch_agent_t apmd_t:dir { getattr search read open };
 allow amazon_cloudwatch_agent_t apmd_t:file { read open getattr write };
 allow amazon_cloudwatch_agent_t apmd_t:lnk_file { read open getattr write };
@@ -273,8 +275,8 @@ allow amazon_cloudwatch_agent_t fs_t:filesystem getattr;
 
 # Modify /var/log directories.
 # Create, write, and delete log files.
-allow amazon_cloudwatch_agent_t var_log_t:dir { add_name write remove_name };
-allow amazon_cloudwatch_agent_t var_log_t:file { append open setattr create write unlink };
+allow amazon_cloudwatch_agent_t var_log_t:dir { add_name write remove_name watch };
+allow amazon_cloudwatch_agent_t var_log_t:file { append open setattr create write unlink map };
 
 
 # Allows reading /proc system files
@@ -319,6 +321,21 @@ allow amazon_cloudwatch_agent_t proc_t:filesystem getattr;
 # -- Reading Apache HTTPD configuration fil
 allow amazon_cloudwatch_agent_t kernel_t:system syslog_read;
 allow amazon_cloudwatch_agent_t httpd_config_t:file { getattr open read };
+
+# Journald log collection permissions
+# -- Allows the agent to:
+# -- Execute journalctl binary to read journal entries.
+# -- Read journal log files from /var/log/journal/ and /run/log/journal/.
+allow amazon_cloudwatch_agent_t journalctl_exec_t:file { execute execute_no_trans open read getattr map };
+
+# syslogd_var_run_t exists on AL2 (where rsyslog is present) but not on AL2023
+optional {
+    require {
+        type syslogd_var_run_t;
+    }
+    allow amazon_cloudwatch_agent_t syslogd_var_run_t:dir { open read search getattr watch };
+    allow amazon_cloudwatch_agent_t syslogd_var_run_t:file { open read getattr };
+}
 
 # Allow DNS resolution - Grants permission to perform DNS resolution
 sysnet_dns_name_resolve(amazon_cloudwatch_agent_t)
